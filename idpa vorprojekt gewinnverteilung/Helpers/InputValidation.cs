@@ -4,20 +4,45 @@ public class InputValidation
 {
     public bool ValidateNumericInput(string input)
     {
-        // Pseudocode: Prüft, ob die Eingabe eine Zahl ist
-        return true;
+        try
+        {
+            if (double.TryParse(input, out double result))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public bool ValidateRange(double input, double min, double max)
     {
-        // Pseudocode: Prüft, ob die Zahl im Bereich zwischen min und max liegt
-        return true;
+        if (input >= min && input <= max)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public bool ValidateRequiredField(string input)
     {
-        // Pseudocode: Prüft, ob das Eingabefeld nicht leer ist
-        return true;
+        if (string.IsNullOrEmpty(input))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }
 

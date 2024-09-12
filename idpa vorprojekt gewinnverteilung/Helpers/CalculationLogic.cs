@@ -2,28 +2,33 @@
 
 public class CalculationLogic
 {
-    public double Add(double a, double b)
+
+    public double CalculateLegalRetainedEarnings(double profit, double capital, double carryforward, double reserves)
     {
-        return 0;
+        while (carryforward < 0)
+        {
+            capital += carryforward;
+            carryforward = 0;
+        }
+
+        if (carryforward >= 0)
+        {
+            if ((carryforward + reserves) < (capital * 0.2))
+            {
+                reserves += (carryforward * 0.05);
+                return reserves;
+            }
+            else if ((carryforward + reserves) > (capital * 0.2))
+            {
+                return 0;
+            }
+        }
+
+        return reserves;
     }
 
-    public double Subtract(double a, double b)
+    public double CalculateDividend(double dividend, double capital, double profit)
     {
-        return 0;
-    }
-
-    public double Multiply(double a, double b)
-    {
-        return 0;
-    }
-
-    public double Divide(double a, double b)
-    {
-        return 0;
-    }
-
-    public double CalculateComplexFormula(double a, double b, double c)
-    {
-        return 0;
+        return dividend = (capital / 100) * dividend;
     }
 }
