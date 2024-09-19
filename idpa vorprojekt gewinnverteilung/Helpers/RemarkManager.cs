@@ -1,26 +1,23 @@
-﻿namespace idpa_vorprojekt_gewinnverteilung.Helpers;
-
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 
-public class RemarkManager
+namespace idpa_vorprojekt_gewinnverteilung.Helpers
 {
-    private List<Remark> remarks = new List<Remark>();
-    private StackPanel remarksPanel;
-    private Border remarkDetailPanel;
-    private TextBlock remarkDetailTitle;
-    private TextBlock remarkDetailContent;
-
-    public RemarkManager(StackPanel remarksPanel, Border remarkDetailPanel, TextBlock remarkDetailTitle, TextBlock remarkDetailContent)
+    public class RemarkManager
     {
-        this.remarksPanel = remarksPanel;
-        this.remarkDetailPanel = remarkDetailPanel;
-        this.remarkDetailTitle = remarkDetailTitle;
-        this.remarkDetailContent = remarkDetailContent;
-    }
+        private readonly StackPanel remarksPanel;
+        private readonly StackPanel remarkDetailPanel;
+        private readonly TextBlock remarkDetailTitle;
+        private readonly TextBlock remarkDetailContent;
+        private Border remarkDetailPanel1;
+
+        public RemarkManager(StackPanel remarksPanel, StackPanel remarkDetailPanel, TextBlock remarkDetailTitle, TextBlock remarkDetailContent)
+        {
+            this.remarksPanel = remarksPanel;
+            this.remarkDetailPanel = remarkDetailPanel;
+            this.remarkDetailTitle = remarkDetailTitle;
+            this.remarkDetailContent = remarkDetailContent;
+        }
 
     public void AddRemark(string title, string content)
     {
@@ -46,17 +43,11 @@ public class RemarkManager
         {
             var remarkControl = new Border
             {
-                Background = new SolidColorBrush(Colors.White),
-                CornerRadius = new CornerRadius(5),
-                Margin = new Thickness(5),
-                Padding = new Thickness(10),
-                Child = new TextBlock { Text = remark.Title, FontWeight = FontWeights.Bold }
-            };
+                AddRemark("No Remarks", "There are currently no remarks available.");
+            }
 
-            remarkControl.MouseLeftButtonUp += (s, e) => ShowRemarkDetail(remark);
-            remarksPanel.Children.Add(remarkControl);
+            remarksPanel.Visibility = Visibility.Visible;
         }
-    }
 
     private void ShowRemarkDetail(Remark remark)
     {
@@ -73,19 +64,15 @@ public class RemarkManager
         var fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.3));
         fadeOutAnimation.Completed += (s, a) =>
         {
-            remarkDetailPanel.Visibility = Visibility.Collapsed;
-            var remark = remarks.Find(r => r.Title == remarkDetailTitle.Text);
-            if (remark != null)
-            {
-                RemoveRemark(remark);
-            }
-        };
-        remarkDetailPanel.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
-    }
-}
+        {
+        }
 
-public class Remark
-{
-    public string Title { get; set; }
-    public string Content { get; set; }
+        // Clears all remarks
+        public void ClearRemarks()
+        {
+            remarksPanel.Children.Clear();
+        }
+    }
+        }
+    }
 }

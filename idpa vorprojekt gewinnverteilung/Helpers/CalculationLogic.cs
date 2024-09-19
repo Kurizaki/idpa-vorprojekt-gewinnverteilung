@@ -23,8 +23,8 @@ public class CalculationLogic
             }
         }
 
-        return reserves;
-    }
+            return carryforward + reserves >= targetReserves ? 0 : reserves;
+        }
 
     public double CalculateDividend(double dividend, double capital, double profit)
     {

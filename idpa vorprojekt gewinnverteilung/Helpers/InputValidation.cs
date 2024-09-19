@@ -1,48 +1,23 @@
-﻿namespace idpa_vorprojekt_gewinnverteilung.Helpers;
-
-public class InputValidation
+﻿namespace idpa_vorprojekt_gewinnverteilung.Helpers
 {
-    public bool ValidateNumericInput(string input)
+    public class InputValidation
     {
-        try
+        // Validates if the input is a numeric value
+        public bool ValidateNumericInput(string input)
         {
-            if (double.TryParse(input, out double result))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return double.TryParse(input, out _);
         }
-        catch
-        {
-            return false;
-        }
-    }
 
-    public bool ValidateRange(double input, double min, double max)
-    {
-        if (input >= min && input <= max)
+        // Validates if the input is within the specified range
+        public bool ValidateRange(double input, double min, double max)
         {
-            return true;
+            return input >= min && input <= max;
         }
-        else
-        {
-            return false;
-        }
-    }
 
-    public bool ValidateRequiredField(string input)
-    {
-        if (string.IsNullOrEmpty(input))
+        // Validates if the input is not null or empty
+        public bool ValidateRequiredField(string input)
         {
-            return false;
-        }
-        else
-        {
-            return true;
+            return !string.IsNullOrEmpty(input);
         }
     }
 }
-
