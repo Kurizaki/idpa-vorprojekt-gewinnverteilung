@@ -1,97 +1,80 @@
-﻿namespace idpa_vorprojekt_gewinnverteilung.Helpers;
-
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 
-public class RemarkManager
+namespace idpa_vorprojekt_gewinnverteilung.Helpers
 {
-    private List<Remark> remarks = new List<Remark>();
-    private StackPanel remarksPanel;
-    private Border remarkDetailPanel;
-    private TextBlock remarkDetailTitle;
-    private TextBlock remarkDetailContent;
-
-    public RemarkManager(StackPanel remarksPanel, Border remarkDetailPanel, TextBlock remarkDetailTitle, TextBlock remarkDetailContent)
+    public class RemarkManager
     {
-        this.remarksPanel = remarksPanel;
-        this.remarkDetailPanel = remarkDetailPanel;
-        this.remarkDetailTitle = remarkDetailTitle;
-        this.remarkDetailContent = remarkDetailContent;
-    }
+        private readonly StackPanel remarksPanel;
+        private readonly StackPanel remarkDetailPanel;
+        private readonly TextBlock remarkDetailTitle;
+        private readonly TextBlock remarkDetailContent;
+        private Border remarkDetailPanel1;
 
-    // Adds a new remark and displays it
-    public void AddRemark(string title, string content)
-    {
-        remarks.Add(new Remark { Title = title, Content = content });
-        DisplayRemarks();
-    }
-
-    // Removes a remark and updates the display
-    public void RemoveRemark(Remark remark)
-    {
-        remarks.Remove(remark);
-        DisplayRemarks();
-    }
-
-    // Returns all remarks
-    public List<Remark> GetAllRemarks()
-    {
-        return remarks;
-    }
-
-    // Displays all remarks in the StackPanel
-    public void DisplayRemarks()
-    {
-        remarksPanel.Children.Clear();
-        foreach (var remark in remarks)
+        public RemarkManager(StackPanel remarksPanel, StackPanel remarkDetailPanel, TextBlock remarkDetailTitle, TextBlock remarkDetailContent)
         {
-            var remarkControl = new Border
+            this.remarksPanel = remarksPanel;
+            this.remarkDetailPanel = remarkDetailPanel;
+            this.remarkDetailTitle = remarkDetailTitle;
+            this.remarkDetailContent = remarkDetailContent;
+        }
+
+        public RemarkManager(StackPanel remarksPanel, Border remarkDetailPanel1, TextBlock remarkDetailTitle, TextBlock remarkDetailContent)
+        {
+            this.remarksPanel = remarksPanel;
+            this.remarkDetailPanel1 = remarkDetailPanel1;
+            this.remarkDetailTitle = remarkDetailTitle;
+            this.remarkDetailContent = remarkDetailContent;
+        }
+
+        // Adds a new remark with title and description
+        public void AddRemark(string title, string description)
+        {
+            // Create a new TextBlock for the remark
+            TextBlock remark = new TextBlock
             {
-                Background = new SolidColorBrush(Colors.White),
-                CornerRadius = new CornerRadius(5),
+                Text = title,
                 Margin = new Thickness(5),
-                Padding = new Thickness(10),
-                Child = new TextBlock { Text = remark.Title, FontWeight = FontWeights.Bold }
+                FontWeight = FontWeights.Bold,
+                Cursor = System.Windows.Input.Cursors.Hand
             };
 
-            remarkControl.MouseLeftButtonUp += (s, e) => ShowRemarkDetail(remark);
-            remarksPanel.Children.Add(remarkControl);
+            // Handle click event to show remark details
+            remark.MouseLeftButtonDown += (s, e) => DisplayRemarkDetails(title, description);
+
+            // Add the new remark to the remarks panel
+            remarksPanel.Children.Add(remark);
         }
-    }
 
-    // Shows the details of a remark
-    private void ShowRemarkDetail(Remark remark)
-    {
-        remarkDetailPanel.Visibility = Visibility.Visible;
-        remarkDetailTitle.Text = remark.Title;
-        remarkDetailContent.Text = remark.Content;
+        // Displays the remarks on the main window
+        public void DisplayRemarks()
+        {
+            if (remarksPanel.Children.Count == 0)
+            {
+                AddRemark("No Remarks", "There are currently no remarks available.");
+            }
 
-        var fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.3));
-        remarkDetailPanel.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
-    }
+            remarksPanel.Visibility = Visibility.Visible;
+        }
 
-    // Closes the detail panel of a remark
-    public void CloseRemarkDetail()
-    {
-        var fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.3));
-        fadeOutAnimation.Completed += (s, a) =>
+        // Displays the details of a remark in a detail panel
+        private void DisplayRemarkDetails(string title, string description)
+        {
+            remarkDetailTitle.Text = title;
+            remarkDetailContent.Text = description;
+            remarkDetailPanel.Visibility = Visibility.Visible;
+        }
+
+        // Closes the remark detail view
+        public void CloseRemarkDetail()
         {
             remarkDetailPanel.Visibility = Visibility.Collapsed;
-            var remark = remarks.Find(r => r.Title == remarkDetailTitle.Text);
-            if (remark != null)
-            {
-                RemoveRemark(remark);
-            }
-        };
-        remarkDetailPanel.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
-    }
-}
+        }
 
-public class Remark
-{
-    public string Title { get; set; }
-    public string Content { get; set; }
+        // Clears all remarks
+        public void ClearRemarks()
+        {
+            remarksPanel.Children.Clear();
+        }
+    }
 }

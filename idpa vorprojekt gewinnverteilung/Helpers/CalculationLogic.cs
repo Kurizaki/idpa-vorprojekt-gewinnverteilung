@@ -1,37 +1,31 @@
-﻿namespace idpa_vorprojekt_gewinnverteilung.Helpers;
-
-public class CalculationLogic
+﻿namespace idpa_vorprojekt_gewinnverteilung.Helpers
 {
-    // Calculates the legal retained earnings based on the input values
-    public double CalculateLegalRetainedEarnings(double profit, double capital, double carryforward, double reserves)
+    public class CalculationLogic
     {
-        // If the carryforward is negative, it is subtracted from the capital
-        while (carryforward < 0)
+        // Calculates the legal retained earnings based on input values
+        public double CalculateLegalRetainedEarnings(double profit, double capital, double carryforward, double reserves)
         {
-            capital += carryforward;
-            carryforward = 0;
+            // Adjust capital if carryforward is negative
+            if (carryforward < 0)
+            {
+                capital += carryforward;
+                carryforward = 0;
+            }
+
+            // Legal retained earnings calculation
+            double targetReserves = capital * 0.2;
+            if (carryforward + reserves < targetReserves)
+            {
+                reserves += profit * 0.05; // Add 5% of profit to reserves
+            }
+
+            return carryforward + reserves >= targetReserves ? 0 : reserves;
         }
 
-        // Calculation of legal retained earnings
-        if (carryforward >= 0)
+        // Calculates dividend based on capital and dividend percentage
+        public double CalculateDividend(double dividendPercentage, double capital, double profit)
         {
-            if ((carryforward + reserves) < (capital * 0.2))
-            {
-                reserves += (profit * 0.05); // 5% of the profit is added to the reserves
-                return reserves;
-            }
-            else if ((carryforward + reserves) > (capital * 0.2))
-            {
-                return 0; // No additional reserves required
-            }
+            return (capital * dividendPercentage) / 100;
         }
-
-        return reserves;
-    }
-
-    // Calculates the dividend based on the capital and the desired dividend percentage
-    public double CalculateDividend(double dividend, double capital, double profit)
-    {
-        return (capital / 100) * dividend;
     }
 }
