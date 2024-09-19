@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:idpa_vorprojekt_gewinnverteilung"
         mc:Ignorable="d"
-      Title="Dividend Distribution Calculator" Height="450" Width="800">
+        Title="Dividend Distribution Calculator" Height="450" Width="800">
     <Grid Background="#BFE7F2" Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
@@ -31,20 +31,14 @@
                 <TextBlock Text="Gewünschte Dividende:" FontWeight="Bold" Margin="5" />
                 <TextBox Name="DividendeTextBox" Margin="5" />
 
-                <Button Name="BerechnenButton" Content="Berechnen" Background="#7CF280" Margin="5" Width="120" />
+                <Button Name="BerechnenButton" Content="Berechnen" Background="#7CF280" Margin="5" Width="120" Click="BerechnenButton_Click"/>
             </StackPanel>
         </Border>
 
         <!-- Middle Panel (Remarks Section) -->
         <Border Grid.Column="1" Margin="10" Background="#D3D3D3" CornerRadius="10" Padding="15">
-            <StackPanel>
+            <StackPanel Name="RemarksPanel">
                 <TextBlock Text="Bemerkung" FontWeight="Bold" Margin="5" />
-                <TextBox Name="BemerkungTextBox1" Margin="5" />
-                <TextBox Name="BemerkungTextBox2" Margin="5" />
-                <TextBox Name="BemerkungTextBox3" Margin="5" />
-                <TextBox Name="BemerkungTextBox4" Margin="5" />
-                <TextBox Name="BemerkungTextBox5" Margin="5" />
-                <TextBox Name="BemerkungTextBox6" Margin="5" />
             </StackPanel>
         </Border>
 
@@ -61,6 +55,19 @@
                 <TextBlock Text="Gewinn- / Verlustvortrag:" FontWeight="Bold" Margin="5" />
                 <TextBlock Name="GewinnVortragOutput" Background="White" Height="30" Margin="5" />
             </StackPanel>
+        </Border>
+
+        <!-- Remark Detail Panel -->
+        <Border Name="RemarkDetailPanel" Grid.ColumnSpan="3" Background="#FFFFFF" CornerRadius="10" Padding="15" Visibility="Collapsed" Opacity="0" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Name="RemarkDetailTitle" FontWeight="Bold" FontSize="16" Margin="5" />
+                <TextBlock Name="RemarkDetailContent" Grid.Row="1" Margin="5" TextWrapping="Wrap" />
+                <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseRemarkDetail_Click" />
+            </Grid>
         </Border>
     </Grid>
 </Window>

@@ -1,18 +1,10 @@
 ﻿using idpa_vorprojekt_gewinnverteilung.Helpers;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace idpa_vorprojekt_gewinnverteilung
 {
-    public partial class MainWindow
+    public partial class MainWindow : Window
     {
         private InputValidation inputValidation;
         private RemarkManager remarkManager;
@@ -21,20 +13,53 @@ namespace idpa_vorprojekt_gewinnverteilung
         public MainWindow()
         {
             InitializeComponent();
+            inputValidation = new InputValidation();
+            remarkManager = new RemarkManager(RemarksPanel, RemarkDetailPanel, RemarkDetailTitle, RemarkDetailContent);
+            calculationLogic = new CalculationLogic();
         }
 
-        public void OnSubmitClick(string a, string b, string c)
+        private void BerechnenButton_Click(object sender, RoutedEventArgs e)
         {
+            OnSubmitClick(JahresgewinnTextBox.Text, AktienTextBox.Text, ReservenTextBox.Text, GewinnVortragTextBox.Text, DividendeTextBox.Text);
         }
 
-        private void DisplayResult(double result)
+        public void OnSubmitClick(string jahresgewinn, string aktien, string reserven, string gewinnVortrag, string dividende)
         {
+            if (inputValidation.ValidateNumericInput(jahresgewinn) &&
+                inputValidation.ValidateNumericInput(aktien) &&
+                inputValidation.ValidateNumericInput(reserven) &&
+                inputValidation.ValidateNumericInput(gewinnVortrag) &&
+                inputValidation.ValidateNumericInput(dividende))
+            {
+                double profit = double.Parse(jahresgewinn);
+                double capital = double.Parse(aktien);
+                double reserves = double.Parse(reserven);
+                double carryforward = double.Parse(gewinnVortrag);
+                double dividend = double.Parse(dividende);
+
+                double legalRetainedEarnings = calculationLogic.CalculateLegalRetainedEarnings(profit, capital, carryforward, reserves);
+                double calculatedDividend = calculationLogic.CalculateDividend(dividend, capital, profit);
+
+                DisplayResult(legalRetainedEarnings, calculatedDividend, carryforward);
+                remarkManager.DisplayRemarks();
+            }
+            else
+            {
+                remarkManager.AddRemark("Ungültige Eingabe", "Bitte geben Sie gültige numerische Werte ein.");
+                remarkManager.DisplayRemarks();
+            }
         }
 
-        private void DisplayRemarks()
+        private void DisplayResult(double legalRetainedEarnings, double calculatedDividend, double carryforward)
         {
+            GewinnreserveOutput.Text = legalRetainedEarnings.ToString("F2");
+            DividendenOutput.Text = calculatedDividend.ToString("F2");
+            GewinnVortragOutput.Text = carryforward.ToString("F2");
+        }
+
+        private void CloseRemarkDetail_Click(object sender, RoutedEventArgs e)
+        {
+            remarkManager.CloseRemarkDetail();
         }
     }
-
-
 }
