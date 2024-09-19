@@ -10,6 +10,21 @@ namespace idpa_vorprojekt_gewinnverteilung
         private RemarkManager remarkManager;
         private CalculationLogic calculationLogic;
 
+        public string RetainedEarningsOutputText
+        {
+            get { return RetainedEarningsOutput.Text; }
+        }
+
+        public string DividendOutputText
+        {
+            get { return DividendOutput.Text; }
+        }
+
+        public string CarryforwardOutputText
+        {
+            get { return CarryforwardOutput.Text; }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -25,7 +40,6 @@ namespace idpa_vorprojekt_gewinnverteilung
 
         public void OnSubmitClick(string annualProfit, string shares, string reserves, string carryforward, string dividend)
         {
-            // Validate input values
             if (inputValidation.ValidateNumericInput(annualProfit) &&
                 inputValidation.ValidateNumericInput(shares) &&
                 inputValidation.ValidateNumericInput(reserves) &&
@@ -38,17 +52,14 @@ namespace idpa_vorprojekt_gewinnverteilung
                 double carryforwardValue = double.Parse(carryforward);
                 double dividendValue = double.Parse(dividend);
 
-                // Calculate legal retained earnings and dividend
                 double legalRetainedEarnings = calculationLogic.CalculateLegalRetainedEarnings(profit, capital, carryforwardValue, reservesValue);
                 double calculatedDividend = calculationLogic.CalculateDividend(dividendValue, capital, profit);
 
-                // Display results
                 DisplayResult(legalRetainedEarnings, calculatedDividend, carryforwardValue);
                 remarkManager.DisplayRemarks();
             }
             else
             {
-                // Add a remark for invalid input
                 remarkManager.AddRemark("Invalid Input", "Please enter valid numeric values.");
                 remarkManager.DisplayRemarks();
             }
@@ -60,7 +71,6 @@ namespace idpa_vorprojekt_gewinnverteilung
             DividendOutput.Text = calculatedDividend.ToString("F2");
             CarryforwardOutput.Text = carryforward.ToString("F2");
 
-            // Add remarks to explain the results
             remarkManager.AddRemark("Calculation Completed", "The calculation of legal retained earnings and dividend has been successfully completed.");
         }
 

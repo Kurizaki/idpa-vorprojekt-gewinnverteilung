@@ -1,30 +1,99 @@
+using idpa_vorprojekt_gewinnverteilung.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace UnitTests
 {
     [TestClass]
     public class InputValidationTests
     {
-        [TestMethod]
-        public void ValidInput_AllFieldsCorrect_SuccessfulValidation()
+        private InputValidation inputValidation;
+
+        [TestInitialize]
+        public void Setup()
         {
-            // Pseudocode: Testet, ob alle Eingabefelder korrekt und vollständig sind
+            inputValidation = new InputValidation();
         }
 
         [TestMethod]
-        public void MissingInput_OneFieldEmpty_ErrorDisplayed()
+        public void ValidateNumericInput_ValidNumber_ReturnsTrue()
         {
-            // Pseudocode: Testet, ob eine Fehlermeldung angezeigt wird, wenn ein Feld fehlt
+            // Arrange
+            string input = "100000";
+
+            // Act
+            bool result = inputValidation.ValidateNumericInput(input);
+
+            // Assert
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public void InvalidInput_NegativeValues_ErrorDisplayed()
+        public void ValidateNumericInput_InvalidNumber_ReturnsFalse()
         {
-            // Pseudocode: Testet, ob eine Fehlermeldung bei ungültigen Werten angezeigt wird
+            // Arrange
+            string input = "abc";
+
+            // Act
+            bool result = inputValidation.ValidateNumericInput(input);
+
+            // Assert
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
-        public void InvalidDividend_DividendGreaterThanProfit_DetailedErrorDisplayed()
+        public void ValidateRequiredField_NonEmptyString_ReturnsTrue()
         {
-            // Pseudocode: Testet, ob eine detaillierte Fehlermeldung bei Dividende > Gewinn angezeigt wird
+            // Arrange
+            string input = "100000";
+
+            // Act
+            bool result = inputValidation.ValidateRequiredField(input);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ValidateRequiredField_EmptyString_ReturnsFalse()
+        {
+            // Arrange
+            string input = "";
+
+            // Act
+            bool result = inputValidation.ValidateRequiredField(input);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateRange_WithinRange_ReturnsTrue()
+        {
+            // Arrange
+            double input = 5;
+            double min = 0;
+            double max = 10;
+
+            // Act
+            bool result = inputValidation.ValidateRange(input, min, max);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ValidateRange_OutOfRange_ReturnsFalse()
+        {
+            // Arrange
+            double input = 15;
+            double min = 0;
+            double max = 10;
+
+            // Act
+            bool result = inputValidation.ValidateRange(input, min, max);
+
+            // Assert
+            Assert.IsFalse(result);
         }
     }
 }

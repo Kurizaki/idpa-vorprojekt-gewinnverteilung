@@ -22,27 +22,23 @@ public class RemarkManager
         this.remarkDetailContent = remarkDetailContent;
     }
 
-    // Adds a new remark and displays it
     public void AddRemark(string title, string content)
     {
         remarks.Add(new Remark { Title = title, Content = content });
         DisplayRemarks();
     }
 
-    // Removes a remark and updates the display
     public void RemoveRemark(Remark remark)
     {
         remarks.Remove(remark);
         DisplayRemarks();
     }
 
-    // Returns all remarks
     public List<Remark> GetAllRemarks()
     {
         return remarks;
     }
 
-    // Displays all remarks in the StackPanel
     public void DisplayRemarks()
     {
         remarksPanel.Children.Clear();
@@ -62,7 +58,6 @@ public class RemarkManager
         }
     }
 
-    // Shows the details of a remark
     private void ShowRemarkDetail(Remark remark)
     {
         remarkDetailPanel.Visibility = Visibility.Visible;
@@ -73,7 +68,6 @@ public class RemarkManager
         remarkDetailPanel.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
     }
 
-    // Closes the detail panel of a remark
     public void CloseRemarkDetail()
     {
         var fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.3));
