@@ -18,43 +18,50 @@ namespace idpa_vorprojekt_gewinnverteilung
             calculationLogic = new CalculationLogic();
         }
 
-        private void BerechnenButton_Click(object sender, RoutedEventArgs e)
+        private void CalculateButton_Click(object sender, RoutedEventArgs e)
         {
-            OnSubmitClick(JahresgewinnTextBox.Text, AktienTextBox.Text, ReservenTextBox.Text, GewinnVortragTextBox.Text, DividendeTextBox.Text);
+            OnSubmitClick(AnnualProfitTextBox.Text, SharesTextBox.Text, ReservesTextBox.Text, CarryforwardTextBox.Text, DividendTextBox.Text);
         }
 
-        public void OnSubmitClick(string jahresgewinn, string aktien, string reserven, string gewinnVortrag, string dividende)
+        public void OnSubmitClick(string annualProfit, string shares, string reserves, string carryforward, string dividend)
         {
-            if (inputValidation.ValidateNumericInput(jahresgewinn) &&
-                inputValidation.ValidateNumericInput(aktien) &&
-                inputValidation.ValidateNumericInput(reserven) &&
-                inputValidation.ValidateNumericInput(gewinnVortrag) &&
-                inputValidation.ValidateNumericInput(dividende))
+            // Validate input values
+            if (inputValidation.ValidateNumericInput(annualProfit) &&
+                inputValidation.ValidateNumericInput(shares) &&
+                inputValidation.ValidateNumericInput(reserves) &&
+                inputValidation.ValidateNumericInput(carryforward) &&
+                inputValidation.ValidateNumericInput(dividend))
             {
-                double profit = double.Parse(jahresgewinn);
-                double capital = double.Parse(aktien);
-                double reserves = double.Parse(reserven);
-                double carryforward = double.Parse(gewinnVortrag);
-                double dividend = double.Parse(dividende);
+                double profit = double.Parse(annualProfit);
+                double capital = double.Parse(shares);
+                double reservesValue = double.Parse(reserves);
+                double carryforwardValue = double.Parse(carryforward);
+                double dividendValue = double.Parse(dividend);
 
-                double legalRetainedEarnings = calculationLogic.CalculateLegalRetainedEarnings(profit, capital, carryforward, reserves);
-                double calculatedDividend = calculationLogic.CalculateDividend(dividend, capital, profit);
+                // Calculate legal retained earnings and dividend
+                double legalRetainedEarnings = calculationLogic.CalculateLegalRetainedEarnings(profit, capital, carryforwardValue, reservesValue);
+                double calculatedDividend = calculationLogic.CalculateDividend(dividendValue, capital, profit);
 
-                DisplayResult(legalRetainedEarnings, calculatedDividend, carryforward);
+                // Display results
+                DisplayResult(legalRetainedEarnings, calculatedDividend, carryforwardValue);
                 remarkManager.DisplayRemarks();
             }
             else
             {
-                remarkManager.AddRemark("Ungültige Eingabe", "Bitte geben Sie gültige numerische Werte ein.");
+                // Add a remark for invalid input
+                remarkManager.AddRemark("Invalid Input", "Please enter valid numeric values.");
                 remarkManager.DisplayRemarks();
             }
         }
 
         private void DisplayResult(double legalRetainedEarnings, double calculatedDividend, double carryforward)
         {
-            GewinnreserveOutput.Text = legalRetainedEarnings.ToString("F2");
-            DividendenOutput.Text = calculatedDividend.ToString("F2");
-            GewinnVortragOutput.Text = carryforward.ToString("F2");
+            RetainedEarningsOutput.Text = legalRetainedEarnings.ToString("F2");
+            DividendOutput.Text = calculatedDividend.ToString("F2");
+            CarryforwardOutput.Text = carryforward.ToString("F2");
+
+            // Add remarks to explain the results
+            remarkManager.AddRemark("Calculation Completed", "The calculation of legal retained earnings and dividend has been successfully completed.");
         }
 
         private void CloseRemarkDetail_Click(object sender, RoutedEventArgs e)

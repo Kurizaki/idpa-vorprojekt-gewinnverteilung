@@ -17,28 +17,28 @@
         <Border Grid.Column="0" Margin="10" Background="#D3D3D3" CornerRadius="10" Padding="15">
             <StackPanel>
                 <TextBlock Text="Jahresgewinn:" FontWeight="Bold" Margin="5" />
-                <TextBox Name="JahresgewinnTextBox" Margin="5" />
+                <TextBox Name="AnnualProfitTextBox" Margin="5" />
 
                 <TextBlock Text="Aktien- / Partizipationskapital:" FontWeight="Bold" Margin="5" />
-                <TextBox Name="AktienTextBox" Margin="5" />
+                <TextBox Name="SharesTextBox" Margin="5" />
 
-                <TextBlock Text="Gesetzlichen Reserven:" FontWeight="Bold" Margin="5" />
-                <TextBox Name="ReservenTextBox" Margin="5" />
+                <TextBlock Text="Gesetzliche Reserven:" FontWeight="Bold" Margin="5" />
+                <TextBox Name="ReservesTextBox" Margin="5" />
 
-                <TextBlock Text="Gewinn- / Verlustvortrag:" FontWeight="Bold" Margin="5" />
-                <TextBox Name="GewinnVortragTextBox" Margin="5" />
+                <TextBlock Text="Gewinnvortrag:" FontWeight="Bold" Margin="5" />
+                <TextBox Name="CarryforwardTextBox" Margin="5" />
 
                 <TextBlock Text="Gewünschte Dividende:" FontWeight="Bold" Margin="5" />
-                <TextBox Name="DividendeTextBox" Margin="5" />
+                <TextBox Name="DividendTextBox" Margin="5" />
 
-                <Button Name="BerechnenButton" Content="Berechnen" Background="#7CF280" Margin="5" Width="120" Click="BerechnenButton_Click"/>
+                <Button Name="CalculateButton" Content="Berechnen" Background="#7CF280" Margin="5" Width="120" Click="CalculateButton_Click"/>
             </StackPanel>
         </Border>
 
         <!-- Middle Panel (Remarks Section) -->
         <Border Grid.Column="1" Margin="10" Background="#D3D3D3" CornerRadius="10" Padding="15">
             <StackPanel Name="RemarksPanel">
-                <TextBlock Text="Bemerkung" FontWeight="Bold" Margin="5" />
+                <TextBlock Text="Bemerkungen" FontWeight="Bold" Margin="5" />
             </StackPanel>
         </Border>
 
@@ -47,13 +47,13 @@
             <StackPanel>
                 <TextBlock Text="Berechnete Verteilung" FontWeight="Bold" FontSize="16" Margin="5" TextAlignment="Center" />
                 <TextBlock Text="Gesetzliche Gewinnreserve:" FontWeight="Bold" Margin="5" />
-                <TextBlock Name="GewinnreserveOutput" Background="White" Height="30" Margin="5" />
+                <TextBlock Name="RetainedEarningsOutput" Background="White" Height="30" Margin="5" />
 
-                <TextBlock Text="Dividendenausschüttung:" FontWeight="Bold" Margin="5" />
-                <TextBlock Name="DividendenOutput" Background="White" Height="30" Margin="5" />
+                <TextBlock Text="Dividendenverteilung:" FontWeight="Bold" Margin="5" />
+                <TextBlock Name="DividendOutput" Background="White" Height="30" Margin="5" />
 
-                <TextBlock Text="Gewinn- / Verlustvortrag:" FontWeight="Bold" Margin="5" />
-                <TextBlock Name="GewinnVortragOutput" Background="White" Height="30" Margin="5" />
+                <TextBlock Text="Gewinnvortrag:" FontWeight="Bold" Margin="5" />
+                <TextBlock Name="CarryforwardOutput" Background="White" Height="30" Margin="5" />
             </StackPanel>
         </Border>
 
