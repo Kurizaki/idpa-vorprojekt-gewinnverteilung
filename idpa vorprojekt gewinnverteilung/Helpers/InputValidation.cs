@@ -22,7 +22,7 @@
         }
 
         // Überprüft die Eingaben, wobei Gewinn auch negativ sein darf (Verlust)
-        public bool ValidateInputs(double profit, double capital, double reserves, double dividendPercentage)
+        public bool ValidateInputs(double profit, double capital, double reserves, double dividend)
         {
             bool isValid = true;
 
@@ -47,7 +47,7 @@
             }
 
             // Dividende muss positiv sein (Dividendenprozentsatz darf nicht negativ sein)
-            if (!ValidatePositiveValue(dividendPercentage))
+            if (!ValidatePositiveValue(dividend))
             {
                 remarkManager?.AddRemark("Ungültige Dividende", "Die Dividende darf nicht negativ sein.");
                 isValid = false;
