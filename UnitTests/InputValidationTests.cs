@@ -11,6 +11,7 @@ namespace UnitTests
         [TestInitialize]
         public void Setup()
         {
+            // No RemarkManager passed, as it's not needed for these tests
             inputValidation = new InputValidation();
         }
 
@@ -18,7 +19,7 @@ namespace UnitTests
         public void ValidateNumericInput_ValidNumber_ReturnsTrue()
         {
             // Arrange
-            string input = "100000";
+            string input = "123.45";
 
             // Act
             bool result = inputValidation.ValidateNumericInput(input);
@@ -41,56 +42,58 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void ValidateRequiredField_NonEmptyString_ReturnsTrue()
+        public void ValidatePositiveValue_PositiveNumber_ReturnsTrue()
         {
             // Arrange
-            string input = "100000";
+            double input = 123.45;
 
             // Act
-            bool result = inputValidation.ValidateRequiredField(input);
+            bool result = inputValidation.ValidatePositiveValue(input);
 
             // Assert
             Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public void ValidateRequiredField_EmptyString_ReturnsFalse()
+        public void ValidatePositiveValue_NegativeNumber_ReturnsFalse()
         {
             // Arrange
-            string input = "";
+            double input = -123.45;
 
             // Act
-            bool result = inputValidation.ValidateRequiredField(input);
+            bool result = inputValidation.ValidatePositiveValue(input);
 
             // Assert
             Assert.IsFalse(result);
         }
 
         [TestMethod]
-        public void ValidateRange_WithinRange_ReturnsTrue()
+        public void ValidateInputs_ValidInputs_ReturnsTrue()
         {
             // Arrange
-            double input = 5;
-            double min = 0;
-            double max = 10;
+            double profit = 100000;
+            double capital = 500000;
+            double reserves = 20000;
+            double dividend = 5;
 
             // Act
-            bool result = inputValidation.ValidateRange(input, min, max);
+            bool result = inputValidation.ValidateInputs(profit, capital, reserves, dividend);
 
             // Assert
             Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public void ValidateRange_OutOfRange_ReturnsFalse()
+        public void ValidateInputs_InvalidInputs_ReturnsFalse()
         {
             // Arrange
-            double input = 15;
-            double min = 0;
-            double max = 10;
+            double profit = -100000;
+            double capital = 0;
+            double reserves = -20000;
+            double dividend = 500;
 
             // Act
-            bool result = inputValidation.ValidateRange(input, min, max);
+            bool result = inputValidation.ValidateInputs(profit, capital, reserves, dividend);
 
             // Assert
             Assert.IsFalse(result);

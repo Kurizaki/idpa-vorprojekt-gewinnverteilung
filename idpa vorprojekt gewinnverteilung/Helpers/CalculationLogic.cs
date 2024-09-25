@@ -1,33 +1,66 @@
-﻿namespace idpa_vorprojekt_gewinnverteilung.Helpers;
-
-public class CalculationLogic
+﻿namespace idpa_vorprojekt_gewinnverteilung.Helpers
 {
-    public double CalculateLegalRetainedEarnings(double profit, double capital, double carryforward, double reserves)
+    public class CalculationLogic
     {
-        while (carryforward < 0)
+        // Berechnung der gesetzlichen Reserven
+        public double CalculateLegalRetainedEarnings(double profit, double capital, double reserves)
         {
-            capital += carryforward;
-            carryforward = 0;
+            // Berechnung der erforderlichen Reserven basierend auf den gesetzlichen Anforderungen
+            double requiredReserves = capital * 0.2; // 20% des Aktienkapitals
+
+            // Falls die erforderlichen Reserven noch nicht erreicht sind, 5% des Gewinns in die Reserven
+            if (reserves < requiredReserves && profit > 0)
+            {
+                double reserveIncrease = profit * 0.05;
+                reserves += reserveIncrease;
+
+                // Rest des Gewinns, der nach der Zuweisung zu den Reserven übrig bleibt
+                profit -= reserveIncrease;
+            }
+            return reserves;
         }
 
-        if (carryforward >= 0)
+        public double CalculateDividend(double dividendAmount, double profit)
         {
-            if ((carryforward + reserves) < (capital * 0.2))
+            // Überprüfen, ob der Dividendenbetrag plausibel ist (darf nicht negativ sein)
+            if (dividendAmount < 0)
             {
-                reserves += (profit * 0.05);
-                return reserves;
+                throw new ArgumentException("Der Dividendenbetrag darf nicht negativ sein.");
             }
-            else if ((carryforward + reserves) > (capital * 0.2))
+
+            // Überprüfen, ob genügend Gewinn nach der Reservebildung vorhanden ist
+            if (dividendAmount > profit)
             {
-                return 0;
+                throw new InvalidOperationException("Der Gewinn reicht nicht aus, um die gewünschte Dividende auszuschütten.");
             }
+
+            return dividendAmount;
         }
 
-            return carryforward + reserves >= targetReserves ? 0 : reserves;
+        // Berechnung des Gewinn- oder Verlustvortrags für das nächste Jahr
+        public double CalculateCarryForward(double profit, double dividend, double reserves)
+        {
+            // Berechnung des verbleibenden Gewinns nach Dividende und Reserven
+            double carryforward = profit - dividend - reserves;
+
+            // Wenn der Gewinn negativ ist (Verlustvortrag), wird dieser Verlust weitergetragen
+            return carryforward;
         }
 
-    public double CalculateDividend(double dividend, double capital, double profit)
-    {
-        return (capital / 100) * dividend;
+        // Neue Methode zur Behandlung von Verlustvorträgen, die vor den Berechnungen den Verlust abzieht
+        public double HandleLossCarryForward(double loss, double capital)
+        {
+            // Verlustvortrag wird vom Kapital abgezogen
+            capital += loss;
+
+            // Sicherstellen, dass Kapital nicht negativ wird
+            if (capital < 0)
+            {
+                throw new InvalidOperationException("Das Kapital ist nach dem Verlustvortrag negativ.");
+            }
+
+            // Geben Sie das angepasste Kapital zurück
+            return capital;
+        }
     }
 }

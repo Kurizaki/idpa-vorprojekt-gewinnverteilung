@@ -1,17 +1,25 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace idpa_vorprojekt_gewinnverteilung.Helpers
 {
+    public class Remark
+    {
+        public string Title { get; set; }
+        public string Content { get; set; }
+    }
+
     public class RemarkManager
     {
-        private readonly StackPanel remarksPanel;
-        private readonly StackPanel remarkDetailPanel;
-        private readonly TextBlock remarkDetailTitle;
-        private readonly TextBlock remarkDetailContent;
-        private Border remarkDetailPanel1;
+        private StackPanel remarksPanel;
+        private Border remarkDetailPanel;
+        private TextBlock remarkDetailTitle;
+        private TextBlock remarkDetailContent;
+        private List<Remark> remarks = new List<Remark>();
+        private Remark currentRemark;
 
-        public RemarkManager(StackPanel remarksPanel, StackPanel remarkDetailPanel, TextBlock remarkDetailTitle, TextBlock remarkDetailContent)
+        public RemarkManager(StackPanel remarksPanel, Border remarkDetailPanel, TextBlock remarkDetailTitle, TextBlock remarkDetailContent)
         {
             this.remarksPanel = remarksPanel;
             this.remarkDetailPanel = remarkDetailPanel;
@@ -19,29 +27,34 @@ namespace idpa_vorprojekt_gewinnverteilung.Helpers
             this.remarkDetailContent = remarkDetailContent;
         }
 
-    public void AddRemark(string title, string content)
-    {
-        remarks.Add(new Remark { Title = title, Content = content });
-        DisplayRemarks();
-    }
-
-    public void RemoveRemark(Remark remark)
-    {
-        remarks.Remove(remark);
-        DisplayRemarks();
-    }
-
-    public List<Remark> GetAllRemarks()
-    {
-        return remarks;
-    }
-
-    public void DisplayRemarks()
-    {
-        remarksPanel.Children.Clear();
-        foreach (var remark in remarks)
+        public void AddRemark(string title, string content)
         {
-            var remarkControl = new Border
+            Remark newRemark = new Remark { Title = title, Content = content };
+            remarks.Add(newRemark);
+            DisplayRemarks();
+        }
+
+        public void RemoveRemark(Remark remark)
+        {
+            remarks.Remove(remark);
+            ReloadRemarks();
+        }
+
+        public void DisplayRemarks()
+        {
+            remarksPanel.Children.Clear();
+            foreach (var remark in remarks)
+            {
+                Button remarkButton = new Button
+                {
+                    Content = remark.Title,
+                    Margin = new Thickness(5)
+                };
+                remarkButton.Click += (s, e) => ShowRemarkDetail(remark);
+                remarksPanel.Children.Add(remarkButton);
+            }
+
+            if (remarks.Count == 0)
             {
                 AddRemark("No Remarks", "There are currently no remarks available.");
             }
@@ -49,30 +62,54 @@ namespace idpa_vorprojekt_gewinnverteilung.Helpers
             remarksPanel.Visibility = Visibility.Visible;
         }
 
-    private void ShowRemarkDetail(Remark remark)
-    {
-        remarkDetailPanel.Visibility = Visibility.Visible;
-        remarkDetailTitle.Text = remark.Title;
-        remarkDetailContent.Text = remark.Content;
-
-        var fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.3));
-        remarkDetailPanel.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
-    }
-
-    public void CloseRemarkDetail()
-    {
-        var fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.3));
-        fadeOutAnimation.Completed += (s, a) =>
+        public void ReloadRemarks()
         {
-        {
+            DisplayRemarks();
         }
 
-        // Clears all remarks
+        private void ShowRemarkDetail(Remark remark)
+        {
+            currentRemark = remark;
+            remarkDetailTitle.Text = remark.Title;
+            remarkDetailContent.Text = remark.Content;
+            remarkDetailPanel.Visibility = Visibility.Visible;
+            remarkDetailPanel.Opacity = 1;
+        }
+
+        public List<Remark> GetAllRemarks()
+        {
+            List<Remark> allRemarks = new List<Remark>();
+            for (int i = 0; i < remarks.Count; i++)
+            {
+                allRemarks.Add(remarks[i]);
+            }
+            return allRemarks;
+        }
+
+        public void CloseRemarkDetail()
+        {
+            remarkDetailPanel.Visibility = Visibility.Collapsed;
+
+            if (currentRemark != null)
+            {
+                DeleteRemark();
+            }
+        }
+
+        public void DeleteRemark()
+        {
+            if (currentRemark != null)
+            {
+                RemoveRemark(currentRemark);
+                currentRemark = null;
+                remarkDetailPanel.Visibility = Visibility.Collapsed;
+            }
+        }
+
         public void ClearRemarks()
         {
+            remarks.Clear();
             remarksPanel.Children.Clear();
-        }
-    }
         }
     }
 }

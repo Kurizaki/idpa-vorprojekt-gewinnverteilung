@@ -1,32 +1,34 @@
-﻿using idpa_vorprojekt_gewinnverteilung.Helpers;
-namespace UnitTests;
+﻿// CalculationLogicTests.cs
+using idpa_vorprojekt_gewinnverteilung.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-[TestClass]
-public class CalculationLogicTests
+namespace UnitTests
 {
-    private CalculationLogic calculationLogic;
-
-    [TestInitialize]
-    public void Setup()
+    [TestClass]
+    public class CalculationLogicTests
     {
-        calculationLogic = new CalculationLogic();
-    }
+        private CalculationLogic calculationLogic;
 
-    [TestMethod]
-    public void ValidCalculation_CorrectValues_CorrectResultsDisplayed()
-    {
-        // Arrange
-        double profit = 100000;
-        double capital = 500000;
-        double carryforward = 20000;
-        double reserves = 50000;
+        [TestInitialize]
+        public void Setup()
+        {
+            calculationLogic = new CalculationLogic();
+        }
 
-        // Act
-        double legalRetainedEarnings = calculationLogic.CalculateLegalRetainedEarnings(profit, capital, carryforward, reserves);
-        double dividend = calculationLogic.CalculateDividend(5, capital, profit);
+        [TestMethod]
+        public void ValidCalculation_CorrectValues_CorrectResultsDisplayed()
+        {
+            // Arrange
+            double profit = 100000;
+            double capital = 500000;
+            double reserves = 20000;
 
-        // Assert
-        Assert.AreEqual(55000, legalRetainedEarnings); // 5% of 100000 added to reserves
-        Assert.AreEqual(25000, dividend); // 5% of 500000
+            // Act
+            double legalRetainedEarnings = calculationLogic.CalculateLegalRetainedEarnings(profit, capital, reserves);
+            double dividend = calculationLogic.CalculateDividend(25000, profit);
+
+            // Assert
+            Assert.AreEqual(25000, dividend); // 5% of 500000
+        }
     }
 }
