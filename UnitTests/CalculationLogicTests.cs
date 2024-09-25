@@ -28,7 +28,7 @@ namespace UnitTests
             double dividend = calculationLogic.CalculateDividend(25000, profit);
 
             // Assert
-            Assert.AreEqual(25000, dividend); // 5% of 500000
+            Assert.AreEqual(25000, dividend);
         }
     }
 }

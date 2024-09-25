@@ -71,9 +71,9 @@ namespace UnitTests
                 carryforwardOutputText = mainWindow.GetCarryforwardOutput();
             });
 
-            Assert.AreEqual("25000.00 CHF", retainedEarningsOutputText); // Adjusted to match expected output
+            Assert.AreEqual("25000.00 CHF", retainedEarningsOutputText);
             Assert.AreEqual("5.00 CHF", dividendOutputText);
-            Assert.AreEqual("74995.00 CHF", carryforwardOutputText); // Adjusted to match expected output
+            Assert.AreEqual("74995.00 CHF", carryforwardOutputText);
         }
 
         [TestMethod]

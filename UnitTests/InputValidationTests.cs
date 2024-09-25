@@ -11,7 +11,6 @@ namespace UnitTests
         [TestInitialize]
         public void Setup()
         {
-            // No RemarkManager passed, as it's not needed for these tests
             inputValidation = new InputValidation();
         }
 

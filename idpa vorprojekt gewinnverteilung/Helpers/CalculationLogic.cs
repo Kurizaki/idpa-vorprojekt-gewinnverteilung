@@ -2,7 +2,7 @@
 {
     public class CalculationLogic
     {
-        // Berechnung der gesetzlichen Reserven
+        // BBeschreibung des Rechenvorgangs
         public double CalculateLegalRetainedEarnings(double profit, double capital, double reserves)
         {
             // Berechnung der erforderlichen Reserven basierend auf den gesetzlichen Anforderungen
